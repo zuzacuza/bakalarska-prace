@@ -1,2 +1,5 @@
 # bakalarska-prace
-verze 0.0.1 - základní struktura, express a cors na serveru, react app na clientu, test jednoduchého fetche a zobrazení zprávy přes react (server: node index.js, client npm run (dev))
+## 🕰️ historické verze 
+- **verze 0.0.1** - základní struktura, express a cors na serveru, react app na clientu, test jednoduchého fetche a zobrazení zprávy přes react
+## spuštění 
+server: node index.js, client npm run (dev)
