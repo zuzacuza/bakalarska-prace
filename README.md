@@ -1,2 +1,2 @@
 # bakalarska-prace
-readme se dopíše později
+verze 0.0.1 - základní struktura, express a cors na serveru, react app na clientu, test jednoduchého fetche a zobrazení zprávy přes react (server: node index.js, client npm run (dev))
