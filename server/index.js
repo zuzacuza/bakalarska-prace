@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const initSqlJs = require('sql.js');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -14,7 +15,8 @@ app.use(express.json());
 let db;
 const loadDB = async () => {
     const SQL = await initSqlJs();
-    const filebuffer = fs.readFileSync('./data/level_one.sqlite');
+    const dbPath = path.join(__dirname, 'data', 'level_one.sqlite');
+    const filebuffer = fs.readFileSync(dbPath);
     db = new SQL.Database(filebuffer);
     console.log("Database for level one is ready.");
 };
@@ -32,7 +34,7 @@ app.post('/api/validate', (req, res) => {
 
         // if no data is returned
         if (studentRes.length === 0) {
-            return res.json({ isCorrect: false, message: "Dotaz nevrátil žádné výsledkx:(", data: [] });
+            return res.json({ isCorrect: false, message: "Dotaz nevrátil žádné výsledky:(", data: [] });
         }
 
         // compare users query with master
