@@ -10,6 +10,7 @@ function App() {
   const [results, setResults] = useState([]); //for values in rows
   const [columns, setColumns] = useState([]); //for column names
   const [isIntroVisible, setIsIntroVisible] = useState(true); //game intro will be displayed
+  const [history, setHistory] = useState([]); //history of users queries
 
   const [currentLevel, setCurrentLevel] = useState('level_1'); //setting story parts
   const [currentPart, setCurrentPart] = useState('part_1');
@@ -24,6 +25,14 @@ function App() {
     setLoading(true);
     setFeedback('Odesláno k validaci.');
     if (validateMode) setValidationResult(null);
+
+    //hadles all historical queries
+    const newHistoryEntry = {
+    queryText: query,
+    type: validateMode ? 'VALIDACE ' : 'NÁHLED ',
+    time: new Date().toLocaleTimeString()
+  };
+  setHistory(prev => [newHistoryEntry, ...prev]);
 
     //fetch master query
     try {
@@ -173,7 +182,7 @@ return (
           )}
         </div>
 
-        {/* right column - schema and result table */}
+        {/* right column - schema, result table and history */}
         <div className="right-column">
           <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
             <button 
@@ -190,24 +199,35 @@ return (
             >
               Schéma databáze
             </button>
+            <button 
+              className={`btn ${rightView === 'history' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ padding: '8px 15px', fontSize: '0.8rem' }}
+              onClick={() => setRightView('history')}
+            >
+              Historie dotazů
+            </button>
           </div>
 
-          {rightView === 'data' ? (
+         {rightView === 'data' && ( //result data
             <>
-              <h2 style={{ marginBottom: '20px' }}>Výpis databáze</h2>
+              <h2 style={{ marginBottom: '20px' }}>Výpis z databáze</h2>
               {results.length > 0 ? (
                 <div style={{ overflowX: 'auto' }}>
                   <table className="result-table">
                     <thead>
                       <tr>
-                        {columns.map((col, index) => <th key={index} style={{ textAlign: 'left', padding: '12px' }}>{col}</th>)}
+                        {columns.map((col, index) => (
+                          <th key={index} style={{ textAlign: 'left', padding: '12px' }}>{col}</th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody>
                       {results.map((row, rowIndex) => (
                         <tr key={rowIndex}>
                           {row.map((cell, cellIndex) => (
-                            <td key={cellIndex} style={{ padding: '12px', borderBottom: '1px solid #d1c7bc', textAlign: 'left' }}>{cell}</td>
+                            <td key={cellIndex} style={{ padding: '12px', borderBottom: '1px solid #d1c7bc', textAlign: 'left' }}>
+                              {cell}
+                            </td>
                           ))}
                         </tr>
                       ))}
@@ -220,7 +240,9 @@ return (
                 </div>
               )}
             </>
-          ) : (
+          )}
+
+          {rightView === 'schema' && ( //schema
             <>
               <h2 style={{ marginBottom: '20px' }}>V archivu najdete tyto tabulky.</h2>
               <div className="schema-container">
@@ -252,11 +274,40 @@ return (
               </div>
             </>
           )}
-        </div>
-      </div>
-    )}
-  </div>
-);
-} 
+
+          {rightView === 'history' && ( //history
+            <>
+              <h2 style={{ marginBottom: '20px' }}>Historie vyšetřování</h2>
+              {history.length > 0 ? (
+                <div className="history-list">
+                  {history.map((entry, index) => (
+                    <div key={index} className="history-item">
+                      <div className="history-header">
+                        <span className="history-type">{entry.type}</span>
+                        <span className="history-time">{entry.time}</span>
+                      </div>
+                      <code className="history-query">{entry.queryText}</code>
+                      <button 
+                        className="btn-link" 
+                        onClick={() => setQuery(entry.queryText)}
+                      >
+                        Hledat znovu
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ padding: '50px', border: '2px dashed #3d2b2b', borderRadius: '12px', textAlign: 'center', opacity: 0.5 }}>
+                  Pro zobrazení historie zadejte dotaz.
+                </div>
+              )}
+            </>
+          )}
+        </div> 
+      </div>   
+    )}       
+  </div>     
+);         
+}            
 
 export default App;
