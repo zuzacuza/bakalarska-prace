@@ -148,13 +148,6 @@ return (
             </div>
           )}
 
-          {feedback && ( //number of rows
-            <div className="feedback-box">
-              <strong style={{ fontSize: '0.8rem' }}>[ ANALÝZA SYSTÉMU ]</strong>
-              <p style={{ marginTop: '5px' }}>{feedback}</p>
-            </div>
-          )}
-
           {validationResult && ( //validation 
             <div className="validation-card">
               <strong style={{ color: '#c28e44' }}>[ INSPEKTOR PAX ]</strong>
@@ -169,6 +162,13 @@ return (
                   Pokračovat v pátrání
                 </button>
               )}
+            </div>
+          )}
+
+          {feedback && ( //number of rows
+            <div className="feedback-box">
+              <strong style={{ fontSize: '0.8rem' }}>[ ANALÝZA SYSTÉMU ]</strong>
+              <p style={{ marginTop: '5px' }}>{feedback}</p>
             </div>
           )}
         </div>
