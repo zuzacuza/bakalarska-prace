@@ -7,5 +7,6 @@
 -**verze 0.3.1** - prohozena karta s validací a počtem řádků pro lepší orientaci
 -**verze 0.3.2** - přidána historie dotazů
 -**verze 0.4.0** - přidány další části úrovně 1
+-**verze 0.4.1** - oprava databáze - smazán sloupec pohlaví
 ## spuštění 
 server: node index.js, client npm run (dev)
