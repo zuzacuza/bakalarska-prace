@@ -4,6 +4,7 @@ import './App.css';
 import paxSuccessImg from './assets/pax_happy.png';
 import paxErrorImg from './assets/pax_angry.png';
 import paxEndImg from './assets/pax_end.png';
+import Typewriter from './Typewriter';
 
 function App() {
   const [query, setQuery] = useState(''); // save users query
@@ -137,11 +138,11 @@ return (
 
         <div className="pax-terminal end-game-pax">
           <strong>[ INSPEKTOR PAX ]</strong>
-          <p>{storyData.game_end.pax_final}</p>
+          <Typewriter text={storyData.game_end.pax_final}speed={20} />
         </div>
 
         <p style={{ fontSize: '0.9rem', opacity: 0.8, color: '#1a1212' }}>
-          {storyData.game_end.thanks}
+        {storyData.game_end.thanks} speed={20}
         </p>
         
         <button onClick={() => window.location.reload()} className="btn btn-secondary">
@@ -161,7 +162,7 @@ return (
           <div className="pax-terminal">
              <div className="pax-column">
               <strong>[ INSPEKTOR PAX ]</strong>
-                {storyData[currentLevel][currentPart].pax_intro}
+                <Typewriter text={storyData[currentLevel][currentPart].pax_intro} speed={20} />
             </div>
             </div>
 
@@ -221,14 +222,17 @@ return (
                   {validationResult}
                 </p>
                 <p style={{lineHeight: '1.4' }}>
-                  {validationResult === 'SPRÁVNĚ' 
-                    ? storyData[currentLevel][currentPart].pax_success 
-                    : storyData[currentLevel][currentPart].pax_error}
+                  <Typewriter 
+                    text={validationResult === 'SPRÁVNĚ' 
+                      ? storyData[currentLevel][currentPart].pax_success 
+                      : storyData[currentLevel][currentPart].pax_error} 
+                    speed={20} 
+                  />
                 </p>
                 {validationResult === 'SPRÁVNĚ' && (
                   <button  //button for continuing
                     className="btn btn-primary" 
-                    style={{ marginTop: '15px' }}
+                    style={{ marginTop: '15px', alignSelf: 'flex-start' }}
                     onClick={goToNextPart} //function for next part
                   >
                     {currentPart === 'part_3' ? 'UZAVŘÍT PŘÍPAD' : 'Pokračovat v pátrání'}

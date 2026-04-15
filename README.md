@@ -9,5 +9,6 @@
 -**verze 0.4.0** - přidány další části úrovně 1
 -**verze 0.4.1** - oprava databáze - smazán sloupec pohlaví
 -**verze 0.5.0** - přidána koncová obrazovka, obrázky paxe a upraveny styly
+-**vezre 0.5.1** - přidán typewriter
 ## spuštění 
 server: node index.js, client npm run (dev)
