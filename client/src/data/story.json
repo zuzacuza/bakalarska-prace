@@ -1,0 +1,11 @@
+{
+  "game_intro": "Vítejte ve městě Virtus. TEXT O HŘE",
+  "level_1": {
+    "title": "Zpackaná loupež",
+    "part_1": {
+      "pax_intro": "Dobré ráno, nováčku. V klenotnictví Monile došlo v noci ke krádeži náhrdelníku. Máme první stopu, na místě byl svědek s příjmením Moretti. Potřebuji, abyste našel jeho konkrétní výpověď, mohla by nám pomoct.",
+      "pax_success": "Skvěle, tady to máme. Výborně, to je náš první popis pachatele. Máme se od čeho odpíchnout.",
+      "hint": "Zkuste filtrovat v tabulce 'svedci' pomocí příjmení'"
+    }
+  }
+}

@@ -23,7 +23,7 @@ const loadDB = async () => {
 loadDB();
 
 // master solution - for validation
-const MASTER_SQL = "SELECT * FROM obyvatele WHERE vyska > 190 AND barva_vlasu = 'šedivá' AND znacka_auta = 'Audi' AND barva_auta = 'stříbrná'";
+const MASTER_SQL = "SELECT * FROM svedci WHERE prijmeni = 'Moretti'";
 
 app.post('/api/validate', (req, res) => {
     const studentSQL = req.body.query; // query written by user
@@ -50,6 +50,36 @@ app.post('/api/validate', (req, res) => {
     } catch (err) {
         // display error, if users query returns it
         res.status(400).json({ error: err.message });
+    }
+});
+
+//loads database schema
+app.get('/api/schema', (req, res) => {
+    try {
+        // all tables except system made tables
+        const tables = db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
+        
+        if (tables.length === 0) {
+            return res.json([]);
+        }
+
+        // take columns from tables
+        const schema = tables[0].values.map(row => {
+            const tableName = row[0];
+            const columnsInfo = db.exec(`PRAGMA table_info(${tableName});`);
+            
+            return {
+                name: tableName,
+                columns: columnsInfo[0].values.map(col => ({
+                    name: col[1], // column name
+                    type: col[2]  // data type
+                }))
+            };
+        });
+
+        res.json(schema);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 });
 

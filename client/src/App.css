@@ -1,0 +1,219 @@
+/*global style - old office vibe*/
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #1a1212; 
+    color: #d1c7bc;
+    font-family: 'Monaco', 'Consolas', 'Lucida Console', monospace;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.5px;
+}
+
+.app-container {
+    /* narrowing container to create margins on sides */
+    max-width: 1700px; 
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* main layout of page */
+.main-layout {
+    display: flex;
+    /* gap between two columns */
+    gap: 100px; 
+    align-items: flex-start;
+}
+
+.left-column {
+    flex: 3.5; 
+}
+
+.right-column {
+    flex: 2.5; 
+    position: sticky;
+    top: 40px;
+}
+
+/* intro screen */
+.intro-screen {
+    /* width restriction to prevent the card from being stretched */
+    max-width: 800px;
+    margin: 100px auto; 
+    padding: 40px;
+    background-color: #d1c7bc;
+    color: #1a1212;
+    border-radius: 20px;
+    border: 3px solid #5c1a1a;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.intro-screen h1 {
+    color: #5c1a1a;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+/* text panel and validation card in same style (because inspector Pax is saying it) */
+.pax-terminal, .validation-card {
+    background-color: #2d1b33; 
+    border-left: 5px solid #5c1a1a; 
+    padding: 25px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+    position: relative;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+.validation-card {
+    border-left: 5px solid #c28e44;
+    margin-top: 20px;
+}
+
+/* text editor */
+.sql-editor {
+    width: 100%;
+    height: 150px;
+    background-color: #f1e7d8; 
+    color: #1a1212; 
+    border: 2px solid #5c1a1a;
+    padding: 15px;
+    font-size: 18px;
+    font-family: 'Courier New', monospace; 
+    border-radius: 12px; 
+    box-shadow: inset 2px 2px 8px rgba(0,0,0,0.2);
+    resize: none;
+    outline: none;
+    /* paddign does not stretch editor */
+    box-sizing: border-box; 
+}
+
+/* buttons */
+.btn {
+    padding: 12px 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: none; 
+    border-radius: 12px;
+    font-family: inherit;
+    font-weight: bold;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.btn:hover:not(:disabled) {
+    background-color: #7a2323;
+    color: white;
+    box-shadow: 0 0 15px rgba(92, 26, 26, 0.5);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background-color: #3d2b2b;
+    color: #d1c7bc;
+}
+
+.btn-primary {
+    background-color: #5c1a1a;
+    color: #fff;
+}
+
+/* result table */
+.result-table {
+    width: 100%;
+    border-collapse: separate; 
+    border-spacing: 0;
+    background-color: #f1e7d8; 
+    color: #1a1212;
+    border: 1px solid #3d2b2b;
+    border-radius: 12px; 
+    overflow: hidden; 
+}
+
+.result-table th {
+    background-color: #3d2b2b;
+    color: #c28e44;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 2px solid #5c1a1a;
+}
+
+.result-table td {
+    padding: 12px;
+    border-bottom: 1px solid #d1c7bc;
+}
+
+/* field for number of results*/
+.feedback-box {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #3d2b2b;
+    background-color: #120d0d;
+    border-radius: 12px;
+}
+
+/* hover text for disabled hint*/
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 250px;
+    background-color: #5c1a1a; 
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 100;
+    bottom: 125%; 
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s; 
+    font-size: 0.8rem;
+    pointer-events: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+/* displays on hover */
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* schema of the database*/
+.schema-table-card {
+    background-color: #f1e7d8;
+    color: #1a1212;
+    border-radius: 12px;
+    border: 1px solid #3d2b2b; 
+    margin-bottom: 25px;
+    overflow: hidden;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.inner-schema-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.schema-table-header {
+    background-color: #3d2b2b;
+    color: #c28e44;
+    padding: 10px 15px;
+    border-bottom: 2px solid #5c1a1a;
+}
+
+.schema-table-body {
+    padding: 15px;
+}

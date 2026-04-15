@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
+import storyData from './data/story.json';
+import './App.css';
 
 function App() {
   const [query, setQuery] = useState(''); // save users query
-  const [feedback, setFeedback] = useState(''); // server response
+  const [feedback, setFeedback] = useState(''); // server response on rows count
+  const [validationResult, setValidationResult] = useState(null); //validation
   const [loading, setLoading] = useState(false); //track loading status
   const [results, setResults] = useState([]); //for values in rows
   const [columns, setColumns] = useState([]); //for column names
+  const [isIntroVisible, setIsIntroVisible] = useState(true); //game intro will be displayed
 
-  //valideteMode determines if the query should be now validated
+  const [currentLevel, setCurrentLevel] = useState('level_1'); //setting story parts
+  const [currentPart, setCurrentPart] = useState('part_1');
+  const [canShowHint, setCanShowHint] = useState(false); // unlock button after 1 mistake
+  const [isHintExpanded, setIsHintExpanded] = useState(false); //expand hint text
+
+  const [databaseSchema, setDatabaseSchema] = useState([]); // Schéma z backendu
+  const [rightView, setRightView] = useState('data'); // Přepínač 'data' vs 'schema'
+
+  //hadnle validation based on backend response
   const handleValidate = async (validateMode = true) => {
     setLoading(true);
     setFeedback('Odesláno k validaci.');
+    if (validateMode) setValidationResult(null);
 
-    //fetch server
+    //fetch master query
     try {
       const response = await fetch('http://localhost:5000/api/validate', {
         method: 'POST',
@@ -22,21 +35,25 @@ function App() {
 
       const data = await response.json();
 
+      //displays data, count number of rows
       if (response.ok) {
-        // save db response from users query
-        setResults(data.data || []);  
-        setColumns(data.columns || [])
-        console.log('data zobrazena')
+        setResults(data.data || []);
+        setColumns(data.columns || []);
+        setFeedback(`Analýza dokončena. Nalezeno záznamů: ${data.data?.length || 0}`);
 
+        //validation and hint logic
         if (validateMode) {
-          setFeedback(data.message); 
-        } else {
-          setFeedback(`Zobrazeno ${data.data?.length || 0} záznamů.`);
+          setValidationResult(data.message);;
+          if (data.isCorrect) {
+            setCanShowHint(false);
+            setIsHintExpanded(false);
+          } else {
+            setCanShowHint(true);
+          }
         }
       } else { 
-        // catch syntax error
         setFeedback("Chyba v SQL dotazu: " + data.error);
-        setResults([]); //table is not displayed if syntax error occured
+        setResults([]);
       }
     } catch (err) {
       setFeedback('Chyba: Nepodařilo se spojit se serverem.');
@@ -45,68 +62,201 @@ function App() {
     }
   };
 
-  return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', fontFamily: 'monospace' }}>
-      <h1>SELECT: Zločin Editor</h1>
-      
-      <p>Zadej SQL dotaz:</p>
-      <textarea //field for writing queries
-        style={{ width: '100%', height: '150px', fontSize: '16px', padding: '10px', backgroundColor: '#f4f4f4' }}
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder="SELECT * FROM ..."
-      />
-      
-      <br />
+  //fetch database scheme from server
+  const fetchSchema = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/api/schema');
+    const data = await response.json();
+    setDatabaseSchema(data);
+  } catch (err) {
+    console.error("Schéma se nepodařilo načíst.");
+  }
+};
 
-      <button //displays result tabule but does not validate
-        onClick={() => handleValidate(false)} 
-        disabled={loading}
-        style={{ marginTop: '10px', marginRight: '10px', padding: '10px 20px', cursor: 'pointer', fontSize: '16px' }}
-      >
-        Zobrazit výsledek
-      </button>
-      
-      <button //button for valitadion
-        onClick={handleValidate} 
-        disabled={loading}
-        style={{ marginTop: '10px', padding: '10px 20px', cursor: 'pointer', fontSize: '16px' }}
-      >
-        {loading ? 'Validace probíhá' : 'Validovat dotaz'}
-      </button>
+// load schema at start
+  React.useEffect(() => {
+    fetchSchema();
+  }, []);
 
-      <div style={{ marginTop: '20px', padding: '15px', border: '1px solid #ccc', borderRadius: '5px' }}>
-        <strong>Vyhodnocení:</strong>
-        <p style={{ color: feedback.includes('SPRÁVNĚ') ? 'green' : 'red' }}>{feedback}</p>
+
+return (
+  <div className="app-container">
+    {isIntroVisible ? ( //display intro screen on load
+      <div className="intro-screen">
+        <h1>SELECT: ZLOČIN</h1>
+        <p style={{ fontSize: '1.2rem', lineHeight: '1.6', fontStyle: 'italic', color: '#1a1212' }}>
+          {storyData.game_intro}
+        </p>
+        <button onClick={() => setIsIntroVisible(false)} className="btn btn-primary">
+          VSTOUPIT DO KANCELÁŘE
+        </button>
       </div>
-      {results.length > 0 && ( //table with data based on user input
-        <div style={{ marginTop: '30px', overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', border: '2px solid #333' }}>
-            <thead>
-              <tr style={{ backgroundColor: '#333', color: 'white' }}>
-                {columns.map((col, index) => (
-                  <th key={index} style={{ padding: '10px', textAlign: 'left', borderBottom: '1px solid #ddd' }}>
-                    {col}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((row, rowIndex) => (
-                <tr key={rowIndex} style={{ backgroundColor: rowIndex % 2 === 0 ? '#fff' : '#f9f9f9' }}>
-                  {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    ) : ( //defines layout
+      <div className="main-layout">
+        <div className="left-column">
+          <h1>{storyData[currentLevel].title}</h1>
+          <p style={{ fontStyle: 'italic', marginBottom: '20px' }}>
+            Vítej v kanceláři. Prozkoumej databázi a najdi shodu s popisem. DOPSAT TEXT
+          </p>
+
+          <div className="pax-terminal"> 
+            <strong>[ INSPEKTOR PAX ]</strong>
+            <p style={{ marginTop: '10px', fontSize: '1.1rem' }}>
+              {validationResult === 'SPRÁVNĚ' 
+                ? storyData[currentLevel][currentPart].pax_success 
+                : storyData[currentLevel][currentPart].pax_intro}
+            </p>
+          </div>
+
+          <p>Zadejte SQL dotaz:</p>
+          <textarea 
+            className="sql-editor"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Zadej SQL dotaz..."
+          />
+          {/* buttons for results and validation */}
+          <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}> 
+            <button onClick={() => handleValidate(false)} disabled={loading} className="btn btn-secondary" style={{ marginRight: '10px' }}>
+              Zobrazit výsledek 
+            </button>
+            <button onClick={() => handleValidate(true)} disabled={loading} className="btn btn-primary">
+              {loading ? 'Validace probíhá' : 'Validovat dotaz'}
+            </button>
+
+            {/* hint */}
+            <div className="tooltip-container">
+              <button 
+                className="btn btn-secondary" 
+                style={{ marginLeft: '10px' }} 
+                disabled={!canShowHint}
+                onClick={() => setIsHintExpanded(!isHintExpanded)}
+              >
+                {isHintExpanded ? "Skrýt nápovědu" : "Nápověda"}
+              </button>
+              {!canShowHint && (
+                <span className="tooltip-text">
+                  Nápověda bude k dispozici po prvním špatném pokusu o validaci.
+                </span>
+              )}
+            </div>
+          </div>
+
+          {isHintExpanded && (
+            <div className="hint-text" style={{ color: '#c28e44', marginTop: '10px' }}>
+              <strong>NÁPOVĚDA:</strong> {storyData[currentLevel][currentPart].hint}
+            </div>
+          )}
+
+          {feedback && ( //number of rows
+            <div className="feedback-box">
+              <strong style={{ fontSize: '0.8rem' }}>[ ANALÝZA SYSTÉMU ]</strong>
+              <p style={{ marginTop: '5px' }}>{feedback}</p>
+            </div>
+          )}
+
+          {validationResult && ( //validation 
+            <div className="validation-card">
+              <strong style={{ color: '#c28e44' }}>[ INSPEKTOR PAX ]</strong>
+              <p style={{ 
+                color: validationResult === 'SPRÁVNĚ' ? '#00ff00' : '#d32f2f',
+                fontWeight: 'bold', marginTop: '10px', fontSize: '1.1rem'
+              }}>
+                {validationResult}
+              </p>
+              {validationResult === 'SPRÁVNĚ' && ( //button for continuing
+                <button className="btn btn-primary" style={{ marginTop: '15px' }}>
+                  Pokračovat v pátrání
+                </button>
+              )}
+            </div>
+          )}
         </div>
-      )}
-    </div>
-  );
-}
+
+        {/* right column - schema and result table */}
+        <div className="right-column">
+          <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+            <button 
+              className={`btn ${rightView === 'data' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ padding: '8px 15px', fontSize: '0.8rem' }}
+              onClick={() => setRightView('data')}
+            >
+              Výpis dat
+            </button>
+            <button 
+              className={`btn ${rightView === 'schema' ? 'btn-primary' : 'btn-secondary'}`}
+              style={{ padding: '8px 15px', fontSize: '0.8rem' }}
+              onClick={() => setRightView('schema')}
+            >
+              Schéma databáze
+            </button>
+          </div>
+
+          {rightView === 'data' ? (
+            <>
+              <h2 style={{ marginBottom: '20px' }}>Výpis databáze</h2>
+              {results.length > 0 ? (
+                <div style={{ overflowX: 'auto' }}>
+                  <table className="result-table">
+                    <thead>
+                      <tr>
+                        {columns.map((col, index) => <th key={index} style={{ textAlign: 'left', padding: '12px' }}>{col}</th>)}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {results.map((row, rowIndex) => (
+                        <tr key={rowIndex}>
+                          {row.map((cell, cellIndex) => (
+                            <td key={cellIndex} style={{ padding: '12px', borderBottom: '1px solid #d1c7bc', textAlign: 'left' }}>{cell}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div style={{ padding: '50px', border: '2px dashed #3d2b2b', borderRadius: '12px', textAlign: 'center', opacity: 0.5 }}>
+                  Pro zobrazení dat zadejte první dotaz.
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <h2 style={{ marginBottom: '20px' }}>V archivu najdete tyto tabulky.</h2>
+              <div className="schema-container">
+                {databaseSchema.map((table) => (
+                  <div key={table.name} className="schema-table-card">
+                    <div className="schema-table-header">
+                      <strong>TABULKA: {table.name}</strong>
+                    </div>
+                    <div className="schema-table-body">
+                      <table className="inner-schema-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                          <tr style={{ borderBottom: '1px solid #5c1a1a' }}>
+                            <th style={{ textAlign: 'left', padding: '5px' }}>Sloupec</th>
+                            <th style={{ textAlign: 'left', padding: '5px' }}>Typ</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {table.columns.map(col => (
+                            <tr key={col.name}>
+                              <td style={{ padding: '5px' }}><strong>{col.name}</strong></td>
+                              <td style={{ padding: '5px', color: '#5c1a1a' }}>{col.type}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+);
+} 
 
 export default App;
