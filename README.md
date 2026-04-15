@@ -6,5 +6,6 @@
 -**verze 0.3.0** - přidány základní dialogy inspektora Paxe, úvodní text a hinty, nastaveny css styly a zprovoznena vizualizace schematu 
 -**verze 0.3.1** - prohozena karta s validací a počtem řádků pro lepší orientaci
 -**verze 0.3.2** - přidána historie dotazů
+-**verze 0.4.0** - přidány další části úrovně 1
 ## spuštění 
 server: node index.js, client npm run (dev)

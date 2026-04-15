@@ -22,23 +22,34 @@ const loadDB = async () => {
 };
 loadDB();
 
-// master solution - for validation
-const MASTER_SQL = "SELECT * FROM svedci WHERE prijmeni = 'Moretti'";
+// master solutions - for validation
+const MASTER_QUERIES = {
+    level_1: {
+        part_1: [
+            "SELECT * FROM svedci WHERE prijmeni = 'Moretti'",
+            "SELECT vypoved FROM svedci WHERE prijmeni = 'Moretti'"
+        ],
+        part_2: ["SELECT * FROM obyvatele WHERE vyska > 190 AND barva_vlasu = 'šedivá'"],
+        part_3: ["SELECT * FROM obyvatele WHERE vyska > 190 AND barva_vlasu = 'šedivá' AND znacka_auta = 'Audi' AND barva_auta = 'stříbrná'"]
+    }
+};
 
 app.post('/api/validate', (req, res) => {
-    const studentSQL = req.body.query; // query written by user
+    const { query: studentSQL, level, part } = req.body; //query written by user + part and level
 
     try {
-        const masterRes = db.exec(MASTER_SQL);
         const studentRes = db.exec(studentSQL);
-
-        // if no data is returned
-        if (studentRes.length === 0) {
-            return res.json({ isCorrect: false, message: "Dotaz nevrátil žádné výsledky:(", data: [] });
+        const solutions = MASTER_QUERIES[level][part];
+        
+       //logic for validation
+        let isCorrect = false;
+        for (const masterSQL of solutions) {
+            const masterRes = db.exec(masterSQL);
+            if (JSON.stringify(masterRes) === JSON.stringify(studentRes)) {
+                isCorrect = true;
+                break;
+            }
         }
-
-        // compare users query with master
-        const isCorrect = JSON.stringify(masterRes) === JSON.stringify(studentRes);
 
         res.json({
             isCorrect: isCorrect,
@@ -48,7 +59,6 @@ app.post('/api/validate', (req, res) => {
         });
 
     } catch (err) {
-        // display error, if users query returns it
         res.status(400).json({ error: err.message });
     }
 });

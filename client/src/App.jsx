@@ -39,8 +39,13 @@ function App() {
       const response = await fetch('http://localhost:5000/api/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: query }),
-      });
+        body: JSON.stringify({ 
+        query: query, 
+        level: currentLevel, 
+        part: currentPart 
+      }),
+    });
+
 
       const data = await response.json();
 
@@ -86,6 +91,22 @@ function App() {
   React.useEffect(() => {
     fetchSchema();
   }, []);
+
+  //for story continuation
+  const goToNextPart = () => {
+  if (currentPart === 'part_1') {
+    setCurrentPart('part_2');
+  } else if (currentPart === 'part_2') {
+    setCurrentPart('part_3');
+  }
+  //reset states
+  setQuery('');
+  setValidationResult(null);
+  setResults([]);
+  setFeedback('');
+  setCanShowHint(false);
+  setIsHintExpanded(false);
+};
 
 
 return (
@@ -167,8 +188,12 @@ return (
                 {validationResult}
               </p>
               {validationResult === 'SPRÁVNĚ' && ( //button for continuing
-                <button className="btn btn-primary" style={{ marginTop: '15px' }}>
-                  Pokračovat v pátrání
+                <button 
+                  className="btn btn-primary" 
+                  style={{ marginTop: '15px' }}
+                  onClick={goToNextPart} // call function for story continuation
+                >
+                  {currentPart === 'part_3' ? 'UZAVŘÍT PŘÍPAD' : 'Pokračovat v pátrání'}
                 </button>
               )}
             </div>

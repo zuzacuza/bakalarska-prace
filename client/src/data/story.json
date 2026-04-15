@@ -5,7 +5,17 @@
     "part_1": {
       "pax_intro": "Dobré ráno, nováčku. V klenotnictví Monile došlo v noci ke krádeži náhrdelníku. Máme první stopu, na místě byl svědek s příjmením Moretti. Potřebuji, abyste našel jeho konkrétní výpověď, mohla by nám pomoct.",
       "pax_success": "Skvěle, tady to máme. Výborně, to je náš první popis pachatele. Máme se od čeho odpíchnout.",
-      "hint": "Zkuste filtrovat v tabulce 'svedci' pomocí příjmení'"
+      "hint": "Zkuste filtrovat v tabulce 'svedci' pomocí příjmení Moretti."
+    },
+    "part_2": {
+      "pax_intro": "Svědek Moretti mluvil o vysokém muži (přes 190 cm) s šedivými vlasy. Najděte všechny informace o obyvatelích, kteří odpovídají tomuto popisu.",
+      "pax_success": "Dobrá práce. Seznam se zúžil na šest podezřelých, ale to je stále moc pro domovní prohlídky. Musíme zjistit víc.",
+      "hint": "Filtrujte tabulku 'obyvatele'. Podmínky jsou: vyska > 190 a barva_vlasu = 'šedivá'."
+    },
+    "part_3": {
+      "pax_intro": "Máme čerstvou zprávu z terénu! Poblíž místa činu bylo viděno stříbrné Audi. Přidejte nové informace k předchozím parametrům a vyhledejte kompletní záznam o pachateli.",
+      "pax_success": "To je on! Máme konkrétní jméno. Skvělá práce, nováčku, tohle je přesně to, co jsme potřebovali k uzavření spisu.",
+      "hint": "K předchozímu dotazu přidejte značku auta 'Audi' a barvu 'stříbrná'."
     }
   }
 }

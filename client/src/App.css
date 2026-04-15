@@ -58,8 +58,8 @@ body {
 .pax-terminal, .validation-card {
     background-color: #2d1b33; 
     border-left: 5px solid #5c1a1a; 
-    padding: 25px;
-    margin-bottom: 30px;
+    padding: 20px;
+    margin-bottom: 10px;
     border-radius: 12px;
     box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
     position: relative;
@@ -133,20 +133,26 @@ body {
     color: #1a1212;
     border: 1px solid #3d2b2b;
     border-radius: 12px; 
-    overflow: hidden; 
+    overflow: hidden;
+    font-size: 0.8rem;
+    table-layout: auto;
 }
 
 .result-table th {
     background-color: #3d2b2b;
     color: #c28e44;
-    padding: 15px;
+    padding: 10px 8px;
     text-align: left;
     border-bottom: 2px solid #5c1a1a;
+    white-space: nowrap;
+    word-break: normal;
 }
 
 .result-table td {
-    padding: 12px;
+    padding: 8px; 
     border-bottom: 1px solid #d1c7bc;
+    white-space: normal; 
+    vertical-align: middle;
 }
 
 /* field for number of results*/
