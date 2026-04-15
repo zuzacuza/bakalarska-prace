@@ -39,6 +39,13 @@ app.post('/api/validate', (req, res) => {
 
     try {
         const studentRes = db.exec(studentSQL);
+
+        if (!studentRes || studentRes.length === 0) {
+            return res.json({ 
+                isCorrect: false
+            });
+        }
+
         const solutions = MASTER_QUERIES[level][part];
         
        //logic for validation

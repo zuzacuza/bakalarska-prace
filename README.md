@@ -8,5 +8,6 @@
 -**verze 0.3.2** - přidána historie dotazů
 -**verze 0.4.0** - přidány další části úrovně 1
 -**verze 0.4.1** - oprava databáze - smazán sloupec pohlaví
+-**verze 0.5.0** - přidána koncová obrazovka, obrázky paxe a upraveny styly
 ## spuštění 
 server: node index.js, client npm run (dev)

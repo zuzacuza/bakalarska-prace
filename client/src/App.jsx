@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import storyData from './data/story.json';
 import './App.css';
+import paxSuccessImg from './assets/pax_happy.png';
+import paxErrorImg from './assets/pax_angry.png';
+import paxEndImg from './assets/pax_end.png';
 
 function App() {
   const [query, setQuery] = useState(''); // save users query
@@ -14,6 +17,7 @@ function App() {
 
   const [currentLevel, setCurrentLevel] = useState('level_1'); //setting story parts
   const [currentPart, setCurrentPart] = useState('part_1');
+  const [isGameOver, setIsGameOver] = useState(false); //set end
   const [canShowHint, setCanShowHint] = useState(false); // unlock button after 1 mistake
   const [isHintExpanded, setIsHintExpanded] = useState(false); //expand hint text
 
@@ -98,6 +102,8 @@ function App() {
     setCurrentPart('part_2');
   } else if (currentPart === 'part_2') {
     setCurrentPart('part_3');
+  } else if (currentPart === 'part_3') {
+    setIsGameOver(true);
   }
   //reset states
   setQuery('');
@@ -121,7 +127,30 @@ return (
           VSTOUPIT DO KANCELÁŘE
         </button>
       </div>
-    ) : ( //defines layout
+    ) : isGameOver ? ( //end screen
+      <div className="intro-screen">
+        <h1 style={{ color: '#1d8f1d' }}>
+          PŘÍPAD UZAVŘEN
+        </h1>
+        
+        <img src={paxEndImg} alt="Pax End" className="pax-image-large" />
+
+        <div className="pax-terminal end-game-pax">
+          <strong>[ INSPEKTOR PAX ]</strong>
+          <p>{storyData.game_end.pax_final}</p>
+        </div>
+
+        <p style={{ fontSize: '0.9rem', opacity: 0.8, color: '#1a1212' }}>
+          {storyData.game_end.thanks}
+        </p>
+        
+        <button onClick={() => window.location.reload()} className="btn btn-secondary">
+          HRÁT ZNOVU
+        </button>
+      </div>
+
+    ) :
+    ( //defines layout
       <div className="main-layout">
         <div className="left-column">
           <h1>{storyData[currentLevel].title}</h1>
@@ -129,14 +158,12 @@ return (
             Vítej v kanceláři. Prozkoumej databázi a najdi shodu s popisem. DOPSAT TEXT
           </p>
 
-          <div className="pax-terminal"> 
-            <strong>[ INSPEKTOR PAX ]</strong>
-            <p style={{ marginTop: '10px', fontSize: '1.1rem' }}>
-              {validationResult === 'SPRÁVNĚ' 
-                ? storyData[currentLevel][currentPart].pax_success 
-                : storyData[currentLevel][currentPart].pax_intro}
-            </p>
-          </div>
+          <div className="pax-terminal">
+             <div className="pax-column">
+              <strong>[ INSPEKTOR PAX ]</strong>
+                {storyData[currentLevel][currentPart].pax_intro}
+            </div>
+            </div>
 
           <p>Zadejte SQL dotaz:</p>
           <textarea 
@@ -180,24 +207,36 @@ return (
 
           {validationResult && ( //validation 
             <div className="validation-card">
-              <strong style={{ color: '#c28e44' }}>[ INSPEKTOR PAX ]</strong>
-              <p style={{ 
-                color: validationResult === 'SPRÁVNĚ' ? '#00ff00' : '#d32f2f',
-                fontWeight: 'bold', marginTop: '10px', fontSize: '1.1rem'
-              }}>
-                {validationResult}
-              </p>
-              {validationResult === 'SPRÁVNĚ' && ( //button for continuing
-                <button 
-                  className="btn btn-primary" 
-                  style={{ marginTop: '15px' }}
-                  onClick={goToNextPart} // call function for story continuation
-                >
-                  {currentPart === 'part_3' ? 'UZAVŘÍT PŘÍPAD' : 'Pokračovat v pátrání'}
-                </button>
-              )}
-            </div>
-          )}
+              <img 
+                src={validationResult === 'SPRÁVNĚ' ? paxSuccessImg : paxErrorImg} 
+                alt="Pax Status" 
+                className="pax-avatar" 
+              />
+              <div className="pax-column">
+                <strong style={{ color: '#d1c7bc' }}>[ INSPEKTOR PAX ]</strong>
+                <p style={{ 
+                  color: validationResult === 'SPRÁVNĚ' ? '#00ff00' : '#d32f2f',
+                  fontWeight: 'bold'
+                }}>
+                  {validationResult}
+                </p>
+                <p style={{lineHeight: '1.4' }}>
+                  {validationResult === 'SPRÁVNĚ' 
+                    ? storyData[currentLevel][currentPart].pax_success 
+                    : storyData[currentLevel][currentPart].pax_error}
+                </p>
+                {validationResult === 'SPRÁVNĚ' && (
+                  <button  //button for continuing
+                    className="btn btn-primary" 
+                    style={{ marginTop: '15px' }}
+                    onClick={goToNextPart} //function for next part
+                  >
+                    {currentPart === 'part_3' ? 'UZAVŘÍT PŘÍPAD' : 'Pokračovat v pátrání'}
+                  </button>
+                )}
+              </div>
+             </div> 
+            )}
 
           {feedback && ( //number of rows
             <div className="feedback-box">
