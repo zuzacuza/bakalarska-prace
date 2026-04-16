@@ -51,6 +51,10 @@ app.post('/api/validate', (req, res) => {
     const { query: studentSQL, level, part } = req.body; //query written by user + part and level
     let tempDb;
 
+    if (!studentSQL || studentSQL.trim() === "") {
+        return res.status(400).json({ error: "Zadejte SQL dotaz před předložením stopy." });
+    }
+
     try {
         // blocking destructive queires
         const forbiddenKeywords = [/DROP/i, /CREATE/i, /ALTER/i, /DELETE/i, /UPDATE/i, /INSERT/i];
@@ -97,7 +101,7 @@ app.post('/api/validate', (req, res) => {
         }
         
         if (!res.headersSent) {
-            return res.status(400).json({ error: "Chyba v SQL syntaxi: " + err.message });
+            return res.status(400).json({ error: err.message });
         }
         console.error("Chyba po odeslání hlaviček:", err.message);
     }

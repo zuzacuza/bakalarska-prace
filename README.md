@@ -16,3 +16,5 @@ server: node index.js, client npm run
 - **vezre 0.5.1** - přidán typewriter
 - **verze 0.6.0** - přepsán herní text, přídáno automatické zobrazení výpisu dat při odeslání query
 - **verze 0.7.0** - dodány všechny bezpečnostní prvky a url pro uživatelské testování
+- **verze 1.0.0** - první release
+- **verze 1.1.0** - přepsány části textu, opravena validace při prázdném dotazu

@@ -31,6 +31,13 @@ function App() {
 
   //hadnle validation based on backend response
   const handleValidate = async (validateMode = true) => {
+    if (!query || !query.trim()) { //for empty queries
+        setFeedback('Zadejte prosím SQL dotaz vyhledáváním.');
+        if (validateMode) {
+            setValidationResult('ŠPATNĚ');
+        }
+        return;
+    }
     setLoading(true);
     setRightView('data'); // while query is sent, result table should automatically be displayed
     setFeedback('Odesláno k validaci.');
@@ -177,8 +184,12 @@ return (
           <textarea 
             className="sql-editor"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Zadej SQL dotaz..."
+            onChange={(e) => {
+              setQuery(e.target.value);
+              e.target.style.height = "auto";
+              e.target.style.height = e.target.scrollHeight + "px";
+            }}
+            placeholder="SELECT * FROM..."
           />
           {/* buttons for results and validation */}
           <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}> 
@@ -201,7 +212,7 @@ return (
               </button>
               {!canShowHint && (
                 <span className="tooltip-text">
-                  Nápověda bude k dispozici po prvním špatném pokusu o validaci.
+                  Nápověda se zpřístupní po první nesprávné neprázdné předložené stopě.
                 </span>
               )}
             </div>

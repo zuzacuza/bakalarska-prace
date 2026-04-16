@@ -1,23 +1,23 @@
 {
-"game_intro": "Vítejte ve městě Virtus!\n\nPrávě jste se stali nejnovějším členem týmu kriminální policie. Vaše pověst schopného detektiva je sice hezká věc, ale v těchto kancelářích vás budou definovat pouze výsledky. Jako nováček si své místo u stolu musíte teprve zasloužit.Prozkoumejte digitální archivy, najděte klíčové svědky a důkazy a dokažte, že máte v týmu své místo. Vaše vyšetřování právě začíná.",
+"game_intro": "Vítejte ve městě Virtus!\n\nPrávě jste se stali nejnovějším členem týmu kriminální policie. Vaše pověst schopného detektiva je sice hezká věc, ale v těchto kancelářích vás budou definovat pouze výsledky. Jako nováček si své místo u stolu musíte teprve zasloužit. Prozkoumejte digitální archivy, najděte klíčové svědky a důkazy a dokažte, že máte v týmu své místo. Vaše vyšetřování právě začíná.",
 "level_1": {
 "title": "Zpackaná loupež",
 "part_1": {
 "pax_intro": "Dobré ráno, nováčku. V klenotnictví Monile došlo v noci ke krádeži náhrdelníku. Máme první stopu, na místě byl svědek s příjmením Moretti. Potřebuji, abyste našel jeho konkrétní výpověď, mohla by se hodit.",
 "pax_success": "Skvěle, tady to máme. Výborně, to je náš první popis pachatele. Máme se od čeho odpíchnout.",
-"pax_error": "Takhle se nikam nedostaneme. Moretti je klíčová postava, musíme najít jeho záznam v tabulce svědků.",
+"pax_error": "Takhle se nikam nedostaneme. Moretti je klíčová postava, musíme najít o něm najít všechny informace v tabulce svědků.",
 "hint": "Zkuste filtrovat v tabulce 'svedci' pomocí příjmení Moretti."
 },
 "part_2": {
 "pax_intro": "Svědek Moretti mluvil o vysokém muži (přes 190 cm) s šedivými vlasy. Najděte všechny informace o obyvatelích, kteří odpovídají tomuto popisu.",
-"pax_success": "Dobrá práce. Seznam se zúžil na šest podezřelých, ale to je stále moc pro domovní prohlídky. Musíme zjistit víc.",
+"pax_success": "Dobrá práce. Seznam se zúžil na sedm podezřelých, ale to je stále moc pro domovní prohlídky. Musíme zjistit víc.",
 "pax_error": "Tenhle výpis neodpovídá popisu od Morettiho. Zaměřte se na výšku nad 190 cm a šedivou barvu vlasů.",
 "hint": "Filtrujte tabulku 'obyvatele'. Podmínky jsou: vyska > 190 a barva_vlasu = 'šedivá'."
 },
 "part_3": {
 "pax_intro": "Máme čerstvou zprávu z terénu! Poblíž místa činu bylo viděno stříbrné Audi. Přidejte nové informace k předchozím parametrům a vyhledejte kompletní záznam o pachateli.",
-"pax_success": "To je on! Máme konkrétní jméno. Skvělá práce, nováčku, tohle je přesně to, co jsme potřebovali.",
-"pax_error": "Vedle. Tenhle člověk s tím nemá nic společného. Musí to být stříbrné Audi a k tomu ten vysoký chlap.",
+"pax_success": "To je on! No jasný Julian Peters, ted teď vylezl z basy! Skvělá práce, nováčku, tohle je přesně to, co jsme potřebovali.",
+"pax_error": "Vedle. Tohle rozhodně není on. Musí to být stříbrné Audi a k tomu ten vysoký chlap.",
 "hint": "K předchozímu dotazu přidejte značku auta 'Audi' a barvu 'stříbrná'."
 }
 },
