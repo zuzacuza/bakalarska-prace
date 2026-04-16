@@ -10,5 +10,6 @@
 -**verze 0.4.1** - oprava databáze - smazán sloupec pohlaví
 -**verze 0.5.0** - přidána koncová obrazovka, obrázky paxe a upraveny styly
 -**vezre 0.5.1** - přidán typewriter
+-**verze 0.6.0** - přepsán herní text, přídáno automatické zobrazení výpisu dat při odeslání query
 ## spuštění 
-server: node index.js, client npm run (dev)
+server: node index.js, client npm run

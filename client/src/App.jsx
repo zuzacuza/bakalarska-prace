@@ -28,6 +28,7 @@ function App() {
   //hadnle validation based on backend response
   const handleValidate = async (validateMode = true) => {
     setLoading(true);
+    setRightView('data'); // while query is sent, result table should automatically be displayed
     setFeedback('Odesláno k validaci.');
     if (validateMode) setValidationResult(null);
 
@@ -142,7 +143,7 @@ return (
         </div>
 
         <p style={{ fontSize: '0.9rem', opacity: 0.8, color: '#1a1212' }}>
-        {storyData.game_end.thanks} speed={20}
+        {storyData.game_end.thanks}
         </p>
         
         <button onClick={() => window.location.reload()} className="btn btn-secondary">
@@ -156,7 +157,7 @@ return (
         <div className="left-column">
           <h1>{storyData[currentLevel].title}</h1>
           <p style={{ fontStyle: 'italic', marginBottom: '20px' }}>
-            Vítej v kanceláři. Prozkoumej databázi a najdi shodu s popisem. DOPSAT TEXT
+            Vítejte v operačním centru. Vaším úkolem je analyzovat dostupné záznamy a najít shodu s popisem od svědků. Pamatujte na technická specifika našeho archivu: názvy sloupců jsou vždy bez diakritiky. Nicméně v samotných datech se diakritika běžně vyskytuje a vyhledávání je citlivé na velikost písmen. Hodně štěstí!
           </p>
 
           <div className="pax-terminal">
@@ -179,7 +180,7 @@ return (
               Zobrazit výsledek 
             </button>
             <button onClick={() => handleValidate(true)} disabled={loading} className="btn btn-primary">
-              {loading ? 'Validace probíhá' : 'Validovat dotaz'}
+              {loading ? 'Pax prověřuje shodu...' : 'Předložit stopu'}
             </button>
 
             {/* hint */}

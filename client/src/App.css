@@ -39,7 +39,7 @@ body {
 .intro-screen {
     /* width restriction to prevent the card from being stretched */
     max-width: 800px;
-    margin: 100px auto; 
+    margin: 50px auto; 
     padding: 40px;
     background-color: #cfc4b8;
     color: #1a1212;
@@ -47,6 +47,7 @@ body {
     border: 3px solid #5c1a1a;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    white-space: pre-wrap;
 }
 
 .intro-screen h1 {
@@ -320,7 +321,7 @@ body {
 
 .pax-image-large {
     width: 100%;
-    max-width: 400px;
+    max-width: 300px;
     height: auto;
     margin: 20px auto;
     display: block;
