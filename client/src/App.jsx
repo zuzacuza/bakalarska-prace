@@ -25,6 +25,10 @@ function App() {
   const [databaseSchema, setDatabaseSchema] = useState([]); // Schéma z backendu
   const [rightView, setRightView] = useState('data'); // Přepínač 'data' vs 'schema'
 
+  const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:5000' 
+  : 'https://bakalarska-prace-l067.onrender.com';
+
   //hadnle validation based on backend response
   const handleValidate = async (validateMode = true) => {
     setLoading(true);
@@ -40,9 +44,11 @@ function App() {
   };
   setHistory(prev => [newHistoryEntry, ...prev]);
 
+
+
     //fetch master query
     try {
-      const response = await fetch('http://localhost:5000/api/validate', {
+      const response = await fetch(`${API_BASE_URL}/api/validate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -85,7 +91,7 @@ function App() {
   //fetch database scheme from server
   const fetchSchema = async () => {
   try {
-    const response = await fetch('http://localhost:5000/api/schema');
+    const response = await fetch(`${API_BASE_URL}/api/schema`);
     const data = await response.json();
     setDatabaseSchema(data);
   } catch (err) {
