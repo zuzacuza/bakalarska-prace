@@ -15,3 +15,4 @@ server: node index.js, client npm run
 - **verze 0.5.0** - přidána koncová obrazovka, obrázky paxe a upraveny styly
 - **vezre 0.5.1** - přidán typewriter
 - **verze 0.6.0** - přepsán herní text, přídáno automatické zobrazení výpisu dat při odeslání query
+- **verze 0.7.0** - dodány všechny bezpečnostní prvky a url pro uživatelské testování

@@ -8,19 +8,32 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+//web protection - authorited domains
+const allowedOrigins = [
+    'http://localhost:5173',          
+    'https://bakalarska-prace-delta.vercel.app/' 
+];
+
+const corsOptions = {
+    origin: allowedOrigins,
+    optionsSuccessStatus: 200
+};  
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // load database to server while starting
-let db;
-const loadDB = async () => {
-    const SQL = await initSqlJs();
+let SQL;
+let dbBuffer;
+
+// izolation and integrity protection
+const setupDB = async () => {
+    SQL = await initSqlJs();
     const dbPath = path.join(__dirname, 'data', 'level_one.sqlite');
-    const filebuffer = fs.readFileSync(dbPath);
-    db = new SQL.Database(filebuffer);
-    console.log("Database for level one is ready.");
+    dbBuffer = fs.readFileSync(dbPath);
+    console.log("Database template is ready in memory.");
 };
-loadDB();
+setupDB();
 
 // master solutions - for validation
 const MASTER_QUERIES = {
@@ -36,9 +49,18 @@ const MASTER_QUERIES = {
 
 app.post('/api/validate', (req, res) => {
     const { query: studentSQL, level, part } = req.body; //query written by user + part and level
+    let tempDb;
 
     try {
-        const studentRes = db.exec(studentSQL);
+        // blocking destructive queires
+        const forbiddenKeywords = [/DROP/i, /CREATE/i, /ALTER/i, /DELETE/i, /UPDATE/i, /INSERT/i];
+        if (forbiddenKeywords.some(regex => regex.test(studentSQL))) {
+            return res.status(400).json({ error: "Dotaz obsahuje nepovolené operace (DROP, DELETE, UPDATE atd.)." });
+        }
+
+        // izolation
+        tempDb = new SQL.Database(dbBuffer);
+        const studentRes = tempDb.exec(studentSQL);
 
         if (!studentRes || studentRes.length === 0) {
             return res.json({ 
@@ -51,22 +73,33 @@ app.post('/api/validate', (req, res) => {
        //logic for validation
         let isCorrect = false;
         for (const masterSQL of solutions) {
-            const masterRes = db.exec(masterSQL);
+            const masterRes = tempDb.exec(masterSQL);
             if (JSON.stringify(masterRes) === JSON.stringify(studentRes)) {
                 isCorrect = true;
                 break;
             }
         }
 
+        //limit results to max 100 records
+        const limitedValues = studentRes[0].values.slice(0, 100);
+        tempDb.close()
+
         res.json({
             isCorrect: isCorrect,
             data: studentRes[0].values, // send data to frontend
             columns: studentRes[0].columns,
-            message: isCorrect ? "SPRÁVNĚ" : "ŠPATNĚ"
+            message: isCorrect ? "SPRÁVNĚ" : (limitedValues.length >= 100 ? "Zobrazeno prvních 100 záznamů." : "ŠPATNĚ")
         });
 
     } catch (err) {
-        res.status(400).json({ error: err.message });
+       if (tempDb) {
+            try { tempDb.close(); } catch (e) { /* ignore */ }
+        }
+        
+        if (!res.headersSent) {
+            return res.status(400).json({ error: "Chyba v SQL syntaxi: " + err.message });
+        }
+        console.error("Chyba po odeslání hlaviček:", err.message);
     }
 });
 
@@ -74,16 +107,18 @@ app.post('/api/validate', (req, res) => {
 app.get('/api/schema', (req, res) => {
     try {
         // all tables except system made tables
-        const tables = db.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
+        const tempDb = new SQL.Database(dbBuffer);
+        const tables = tempDb.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
         
         if (tables.length === 0) {
+            tempDb.close();
             return res.json([]);
         }
 
         // take columns from tables
         const schema = tables[0].values.map(row => {
             const tableName = row[0];
-            const columnsInfo = db.exec(`PRAGMA table_info(${tableName});`);
+            const columnsInfo = tempDb.exec(`PRAGMA table_info(${tableName});`);
             
             return {
                 name: tableName,
@@ -95,6 +130,8 @@ app.get('/api/schema', (req, res) => {
         });
 
         res.json(schema);
+        tempDb.close();
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
