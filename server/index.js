@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 //web protection - authorited domains
 const allowedOrigins = [
     'http://localhost:5173',          
-    'https://bakalarska-prace-delta.vercel.app/' 
+    'https://bakalarska-prace-l067.onrender.com' 
 ];
 
 const corsOptions = {
