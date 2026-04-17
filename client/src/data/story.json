@@ -16,7 +16,7 @@
 },
 "part_3": {
 "pax_intro": "Máme čerstvou zprávu z terénu! Poblíž místa činu bylo viděno stříbrné Audi. Přidejte nové informace k předchozím parametrům a vyhledejte kompletní záznam o pachateli.",
-"pax_success": "To je on! No jasný Julian Peters, ted teď vylezl z basy! Skvělá práce, nováčku, tohle je přesně to, co jsme potřebovali.",
+"pax_success": "To je on! No jasný, Julian Peters, te teď vylezl z basy! Skvělá práce, nováčku, tohle je přesně to, co jsme potřebovali.",
 "pax_error": "Vedle. Tohle rozhodně není on. Musí to být stříbrné Audi a k tomu ten vysoký chlap.",
 "hint": "K předchozímu dotazu přidejte značku auta 'Audi' a barvu 'stříbrná'."
 }
