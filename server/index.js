@@ -47,7 +47,23 @@ const MASTER_QUERIES = {
     }
 };
 
-app.post('/api/validate', (req, res) => {
+const executeWithTimeout = (db, query, timeoutMs = 1000) => {
+    return Promise.race([
+        new Promise((resolve, reject) => {
+            try {
+                const result = db.exec(query);
+                resolve(result);
+            } catch (err) {
+                reject(err);
+            }
+        }),
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Dotaz překročil časový limit 1000 ms.")), timeoutMs)
+        )
+    ]);
+};
+
+app.post('/api/validate', async (req, res) => {
     const { query: studentSQL, level, part } = req.body; //query written by user + part and level
     let tempDb;
 
@@ -64,7 +80,7 @@ app.post('/api/validate', (req, res) => {
 
         // izolation
         tempDb = new SQL.Database(dbBuffer);
-        const studentRes = tempDb.exec(studentSQL);
+        const studentRes = await executeWithTimeout(tempDb, studentSQL, 1000);
 
         if (!studentRes || studentRes.length === 0) {
             return res.json({ 

@@ -303,18 +303,20 @@ return (
                     <thead>
                       <tr>
                         {columns.map((col, index) => (
+                          col !== 'osoba_id' && (
                           <th key={index} style={{ textAlign: 'left', padding: '12px' }}>{col}</th>
-                        ))}
+                        )))}
                       </tr>
                     </thead>
                     <tbody>
                       {results.map((row, rowIndex) => (
                         <tr key={rowIndex}>
                           {row.map((cell, cellIndex) => (
+                            columns[cellIndex] !== 'osoba_id' && (
                             <td key={cellIndex} style={{ padding: '12px', borderBottom: '1px solid #d1c7bc', textAlign: 'left' }}>
                               {cell}
                             </td>
-                          ))}
+                          )))}
                         </tr>
                       ))}
                     </tbody>
@@ -346,7 +348,9 @@ return (
                           </tr>
                         </thead>
                         <tbody>
-                          {table.columns.map(col => (
+                          {table.columns
+                          .filter(col => col.name !== 'osoba_id') //foreign key is not visible as it is not needed
+                          .map(col => (
                             <tr key={col.name}>
                               <td style={{ padding: '5px' }}><strong>{col.name}</strong></td>
                               <td style={{ padding: '5px', color: '#5c1a1a' }}>{col.type}</td>

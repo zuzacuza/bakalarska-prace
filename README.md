@@ -18,3 +18,4 @@ server: node index.js, client npm run
 - **verze 0.7.0** - dodány všechny bezpečnostní prvky a url pro uživatelské testování
 - **verze 1.0.0** - první release
 - **verze 1.1.0** - přepsány části textu, opravena validace při prázdném dotazu
+- **verze 1.2.0** - upravena databáze a blokováno zobrazení osoba_id, přidán timeout limit
