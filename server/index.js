@@ -26,7 +26,6 @@ app.use(express.json());
 let SQL;
 let dbBuffer;
 
-// izolation and integrity protection
 const setupDB = async () => {
     SQL = await initSqlJs();
     const dbPath = path.join(__dirname, 'data', 'level_one.sqlite');
@@ -67,10 +66,6 @@ app.post('/api/validate', async (req, res) => {
     const { query: studentSQL, level, part } = req.body; //query written by user + part and level
     let tempDb;
 
-    if (!studentSQL || studentSQL.trim() === "") {
-        return res.status(400).json({ error: "Zadejte SQL dotaz před předložením stopy." });
-    }
-
     try {
         // blocking destructive queires
         const forbiddenKeywords = [/DROP/i, /CREATE/i, /ALTER/i, /DELETE/i, /UPDATE/i, /INSERT/i];
@@ -78,7 +73,7 @@ app.post('/api/validate', async (req, res) => {
             return res.status(400).json({ error: "Dotaz obsahuje nepovolené operace (DROP, DELETE, UPDATE atd.)." });
         }
 
-        // izolation
+        // izolation and integrity protection
         tempDb = new SQL.Database(dbBuffer);
         const studentRes = await executeWithTimeout(tempDb, studentSQL, 1000);
 

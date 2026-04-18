@@ -29,7 +29,7 @@ function App() {
   ? 'http://localhost:5000' 
   : 'https://bakalarska-prace-l067.onrender.com';
 
-  //hadnle validation based on backend response
+  //handle validation based on backend response
   const handleValidate = async (validateMode = true) => {
     if (!query || !query.trim()) { //for empty queries
         setFeedback('Zadejte prosím SQL dotaz vyhledáváním.');
