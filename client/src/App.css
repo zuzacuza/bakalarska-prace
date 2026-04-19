@@ -25,10 +25,12 @@ body {
     align-items: flex-start;
 }
 
+/*left side - interactive part*/
 .left-column {
     flex: 3.5; 
 }
 
+/*right side - resluts, schema and history */
 .right-column {
     flex: 2.5; 
     position: sticky;
@@ -50,6 +52,7 @@ body {
     white-space: pre-wrap;
 }
 
+/* welcome text */
 .intro-screen h1 {
     color: #5c1a1a;
     font-size: 2.5rem;
@@ -86,6 +89,7 @@ body {
     gap: 5px;
 }
 
+/* smaller pax image */
 .pax-avatar {
     width: 120px; 
     height: auto;
@@ -125,6 +129,7 @@ body {
     margin-top: 10px;
 }
 
+/*button options*/
 .btn:hover:not(:disabled) {
     background-color: #7a2323;
     color: white;
@@ -186,12 +191,13 @@ body {
     border-radius: 12px;
 }
 
-/* hover text for disabled hint*/
+/* hover container for disabled hint*/
 .tooltip-container {
     position: relative;
     display: inline-block;
 }
 
+/* hover text for disabled hint*/
 .tooltip-text {
     visibility: hidden;
     width: 250px;
@@ -253,6 +259,7 @@ body {
     gap: 15px;
 }
 
+/*queries in history*/
 .history-item {
     background-color: #f1e7d8; 
     color: #1a1212; 
@@ -286,6 +293,7 @@ body {
     word-break: break-all;
 }
 
+/*for inserting history queries*/
 .btn-link {
     background: none;
     border: none;
@@ -301,6 +309,7 @@ body {
     color: #5c1a1a;
 }
 
+/* end game screen */
 .end-game-pax {
     text-align: left;
     color: #d1c7bc !important; 
@@ -319,7 +328,7 @@ body {
     display: block;
     margin-bottom: 0px;
 }
-
+/* big pax image*/
 .pax-image-large {
     width: 100%;
     max-width: 300px;

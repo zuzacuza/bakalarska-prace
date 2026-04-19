@@ -22,8 +22,8 @@ function App() {
   const [canShowHint, setCanShowHint] = useState(false); // unlock button after 1 mistake
   const [isHintExpanded, setIsHintExpanded] = useState(false); //expand hint text
 
-  const [databaseSchema, setDatabaseSchema] = useState([]); // Schéma z backendu
-  const [rightView, setRightView] = useState('data'); // Přepínač 'data' vs 'schema'
+  const [databaseSchema, setDatabaseSchema] = useState([]); // from backend
+  const [rightView, setRightView] = useState('data'); // switch for right column
 
   const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:5000' 
@@ -51,8 +51,6 @@ function App() {
   };
   setHistory(prev => [newHistoryEntry, ...prev]);
 
-
-
     //fetch master query
     try {
       const response = await fetch(`${API_BASE_URL}/api/validate`, {
@@ -64,7 +62,6 @@ function App() {
         part: currentPart 
       }),
     });
-
 
       const data = await response.json();
 
@@ -95,7 +92,7 @@ function App() {
     }
   };
 
-  //fetch database scheme from server
+  //fetch database schema from server
   const fetchSchema = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/schema`);
@@ -128,7 +125,6 @@ function App() {
   setCanShowHint(false);
   setIsHintExpanded(false);
 };
-
 
 return (
   <div className="app-container">
@@ -181,7 +177,7 @@ return (
             </div>
 
           <p>Zadejte SQL dotaz:</p>
-          <textarea 
+          <textarea //sql editor for writing queries
             className="sql-editor"
             value={query}
             onChange={(e) => {

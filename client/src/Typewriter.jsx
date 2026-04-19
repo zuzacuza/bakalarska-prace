@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+//component for sequential display of text
 const Typewriter = ({ text, speed = 25 }) => {
   const [displayedText, setDisplayedText] = useState('');
 

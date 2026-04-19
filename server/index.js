@@ -73,7 +73,7 @@ app.post('/api/validate', async (req, res) => {
             return res.status(400).json({ error: "Dotaz obsahuje nepovolené operace (DROP, DELETE, UPDATE atd.)." });
         }
 
-        // izolation and integrity protection
+        // isolation and integrity protection
         tempDb = new SQL.Database(dbBuffer);
         const studentRes = await executeWithTimeout(tempDb, studentSQL, 1000);
 
