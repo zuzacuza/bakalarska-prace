@@ -46,21 +46,6 @@ const MASTER_QUERIES = {
     }
 };
 
-const executeWithTimeout = (db, query, timeoutMs = 1000) => {
-    return Promise.race([
-        new Promise((resolve, reject) => {
-            try {
-                const result = db.exec(query);
-                resolve(result);
-            } catch (err) {
-                reject(err);
-            }
-        }),
-        new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Dotaz překročil časový limit 1000 ms.")), timeoutMs)
-        )
-    ]);
-};
 
 app.post('/api/validate', async (req, res) => {
     const { query: studentSQL, level, part } = req.body; //query written by user + part and level
@@ -73,9 +58,14 @@ app.post('/api/validate', async (req, res) => {
             return res.status(400).json({ error: "Dotaz obsahuje nepovolené operace (DROP, DELETE, UPDATE atd.)." });
         }
 
+        //blocking CTE (for mainly recrusive) queires
+        if (/WITH\s+/i.test(studentSQL)) {
+            return res.status(400).json({ error: "CTE dotazy nejsou povoleny." });
+        }
+
         // isolation and integrity protection
         tempDb = new SQL.Database(dbBuffer);
-        const studentRes = await executeWithTimeout(tempDb, studentSQL, 1000);
+        const studentRes = tempDb.exec(studentSQL);
 
         if (!studentRes || studentRes.length === 0) {
             return res.json({ 
