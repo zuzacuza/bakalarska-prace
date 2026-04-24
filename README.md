@@ -19,3 +19,5 @@ server: node index.js, client npm run
 - **verze 1.0.0** - první release
 - **verze 1.1.0** - přepsány části textu, opravena validace při prázdném dotazu
 - **verze 1.2.0** - upravena databáze a blokováno zobrazení osoba_id, přidán timeout limit
+- **verze 1.2.1** - blokování CTE queries proti rekurzím
+- **verze 1.3.0** - oprava databáze, přidání view a schování tabulky výpovědí

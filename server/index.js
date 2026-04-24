@@ -113,7 +113,7 @@ app.get('/api/schema', (req, res) => {
     try {
         // all tables except system made tables
         const tempDb = new SQL.Database(dbBuffer);
-        const tables = tempDb.exec("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';");
+        const tables = tempDb.exec("SELECT name, type FROM sqlite_master WHERE type IN ('table', 'view') AND name NOT LIKE 'sqlite_%';");
         
         if (tables.length === 0) {
             tempDb.close();
@@ -123,10 +123,12 @@ app.get('/api/schema', (req, res) => {
         // take columns from tables
         const schema = tables[0].values.map(row => {
             const tableName = row[0];
+            const entityType = row[1];
             const columnsInfo = tempDb.exec(`PRAGMA table_info(${tableName});`);
             
             return {
                 name: tableName,
+                type: entityType,
                 columns: columnsInfo[0].values.map(col => ({
                     name: col[1], // column name
                     type: col[2]  // data type

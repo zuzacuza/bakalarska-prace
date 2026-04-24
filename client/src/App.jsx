@@ -328,12 +328,14 @@ return (
 
           {rightView === 'schema' && ( //schema
             <>
-              <h2 style={{ marginBottom: '20px' }}>V archivu najdete tyto tabulky.</h2>
+              <h2 style={{ marginBottom: '20px' }}>V archivu jsou dostupné tyto objekty.</h2>
               <div className="schema-container">
-                {databaseSchema.map((table) => (
+                {databaseSchema
+                  .filter(table => table.name !== 'vypovedi')
+                  .map((table) => (
                   <div key={table.name} className="schema-table-card">
                     <div className="schema-table-header">
-                      <strong>TABULKA: {table.name}</strong>
+                      <strong>{table.type === 'view' ? 'POHLED' : 'TABULKA'}: {table.name}</strong>
                     </div>
                     <div className="schema-table-body">
                       <table className="inner-schema-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
