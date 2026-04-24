@@ -5,8 +5,8 @@
   "part_1": {
   "pax_intro": "Dobré ráno, nováčku. V klenotnictví Monile došlo v noci ke krádeži náhrdelníku. Máme první stopu, na místě byl svědek s příjmením Moretti. Potřebuji, abyste našel jeho konkrétní výpověď, mohla by se hodit.",
   "pax_success": "Skvěle, tady to máme. Výborně, to je náš první popis pachatele. Máme se od čeho odpíchnout.",
-  "pax_error": "Takhle se nikam nedostaneme. Moretti je důležitým svědkem, musíme najít o něm najít všechny informace v tabulce svědků.",
-  "hint": "Zkuste filtrovat v tabulce 'svedci' pomocí příjmení Moretti."
+  "pax_error": "Takhle se nikam nedostaneme. Moretti je důležitým svědkem, musíme najít jeho výpověď.",
+  "hint": "Zkuste filtrovat ve view 'svedci' pomocí příjmení Moretti."
   },
   "part_2": {
   "pax_intro": "Svědek Moretti mluvil o vysokém muži (přes 190 cm) s šedivými vlasy. Najděte všechny informace o obyvatelích, kteří odpovídají tomuto popisu.",
