@@ -68,8 +68,11 @@ app.post('/api/validate', async (req, res) => {
         const studentRes = tempDb.exec(studentSQL);
 
         if (!studentRes || studentRes.length === 0) {
+            if (tempDb) tempDb.close();
             return res.json({ 
-                isCorrect: false
+                isCorrect: false,
+                data: [],
+                message: "ŠPATNĚ"
             });
         }
 
@@ -91,7 +94,7 @@ app.post('/api/validate', async (req, res) => {
 
         res.json({
             isCorrect: isCorrect,
-            data: studentRes[0].values, // send data to frontend
+            data: limitedValues, // send limited data to frontend
             columns: studentRes[0].columns,
             message: isCorrect ? "SPRÁVNĚ" : (limitedValues.length >= 100 ? "Zobrazeno prvních 100 záznamů." : "ŠPATNĚ")
         });
